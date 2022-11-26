@@ -32,6 +32,7 @@
     <dimen name="fourteenSizeSP">14sp</dimen>
     <dimen name="sixteenSizeSP">16sp</dimen>
     <dimen name="eighteenSizeSP">18sp</dimen>
+    <dimen name="twentyOneSizeSP">21sp</dimen>
 
 
 </resources>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_layout"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="62dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    android:background="@color/bottomSheetBgClr"
+    android:padding="@dimen/twentySize">
+
+    <ImageView
+        android:layout_width="@dimen/seventySize"
+        android:layout_height="@dimen/fiveSize"
+        android:background="@drawable/bottomsheet_handle"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/comments"
+        android:textColor="@color/black"
+        android:textSize="@dimen/eighteenSizeSP"
+        android:fontFamily="@font/noto_sans_medium"
+        android:textStyle="bold"
+        android:gravity="top"
+        android:includeFontPadding="false"
+        android:layout_marginTop="@dimen/twentySize"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comments_recycler_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:clipToPadding="false"/>
+
+</LinearLayout>

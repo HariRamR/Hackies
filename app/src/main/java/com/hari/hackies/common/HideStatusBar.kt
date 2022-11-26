@@ -1,13 +1,16 @@
-package com.hari.hackies.common;
+package com.hari.hackies.common
 
-import android.app.Activity;
-import android.view.Window;
-import android.view.WindowManager;
+import android.app.Activity
+import android.view.Window
+import android.view.WindowManager
 
-public class HideStatusBar {
+object HideStatusBar {
 
-    public static void hideStatusBar(Activity activity){
-        activity.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    fun hideStatusBar(activity: Activity) {
+        activity.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        activity.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
     }
 }
