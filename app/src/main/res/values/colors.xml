@@ -9,10 +9,11 @@
     <color name="greyShade76">#76808A</color>
     <color name="greyShade78">#787F89</color>
     <color name="appBgClr">#F7F7F7</color>
+    <color name="splashAppNameBGClr">#76808A</color>
     <color name="bottomSheetHandleLightClr">#C6EBF6</color>
     <color name="bottomSheetHandleDarkClr">#18282D</color>
     <color name="transparent">#FCFCFC</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 
 </resources>

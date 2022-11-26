@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Hackies</string>
     <string name="search">Search</string>
+    <string name="hackies">Hackies</string>
+    <string name="search_stories">Search stories</string>
+    <string name="stories">Stories</string>
 </resources>

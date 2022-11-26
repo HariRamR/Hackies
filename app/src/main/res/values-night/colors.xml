@@ -8,7 +8,8 @@
     <color name="greyShade75">#75808A</color>
     <color name="greyShade76">#76808A</color>
     <color name="greyShade78">#787F89</color>
-    <color name="appBgClr">#F7F7F7</color>
+    <color name="appBgClr">#B4BCC5</color>
+    <color name="splashAppNameBGClr">#FFFFFF</color>
     <color name="bottomSheetHandleLightClr">#C6EBF6</color>
     <color name="bottomSheetHandleDarkClr">#18282D</color>
     <color name="transparent">#FCFCFC</color>

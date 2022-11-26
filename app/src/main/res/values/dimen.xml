@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="tenSize">10</dimen>
-    <dimen name="fourteenSize">14</dimen>
-    <dimen name="fifteenSize">15</dimen>
-    <dimen name="sixteenSize">16</dimen>
-    <dimen name="eighteenSize">18</dimen>
-    <dimen name="twentySize">20</dimen>
-    <dimen name="twentyOneSize">21</dimen>
-    <dimen name="twentyTwoSize">22</dimen>
-    <dimen name="twentyThreeSize">23</dimen>
-    <dimen name="twentyFiveSize">25</dimen>
-    <dimen name="thirtySize">30</dimen>
-    <dimen name="thirtyFourSize">34</dimen>
-    <dimen name="thirtyFiveSize">35</dimen>
-    <dimen name="fortySize">40</dimen>
-    <dimen name="fiftySize">50</dimen>
-    <dimen name="sixtySize">60</dimen>
-    <dimen name="seventySize">70</dimen>
-    <dimen name="eightySize">80</dimen>
-    <dimen name="ninetySize">90</dimen>
-    <dimen name="hundredSize">100</dimen>
-    <dimen name="hundredAndTwentySize">120</dimen>
-    <dimen name="twoHundredSize">200</dimen>
-    <dimen name="twoHundredAndFiftySize">250</dimen>
-    <dimen name="threeHundredAndFiftySize">350</dimen>
+    <dimen name="zeroSize">0dp</dimen>
+    <dimen name="fiveSize">5dp</dimen>
+    <dimen name="tenSize">10dp</dimen>
+    <dimen name="fourteenSize">14dp</dimen>
+    <dimen name="fifteenSize">15dp</dimen>
+    <dimen name="sixteenSize">16dp</dimen>
+    <dimen name="eighteenSize">18dp</dimen>
+    <dimen name="twentySize">20dp</dimen>
+    <dimen name="twentyOneSize">21dp</dimen>
+    <dimen name="twentyTwoSize">22dp</dimen>
+    <dimen name="twentyThreeSize">23dp</dimen>
+    <dimen name="twentyFiveSize">25dp</dimen>
+    <dimen name="thirtySize">30dp</dimen>
+    <dimen name="thirtyFourSize">34dp</dimen>
+    <dimen name="thirtyFiveSize">35dp</dimen>
+    <dimen name="fortySize">40dp</dimen>
+    <dimen name="fiftySize">50dp</dimen>
+    <dimen name="sixtySize">60dp</dimen>
+    <dimen name="seventySize">70dp</dimen>
+    <dimen name="eightySize">80dp</dimen>
+    <dimen name="ninetySize">90dp</dimen>
+    <dimen name="hundredSize">100dp</dimen>
+    <dimen name="hundredAndTwentySize">120dp</dimen>
+    <dimen name="twoHundredSize">200dp</dimen>
+    <dimen name="twoHundredAndFiftySize">250dp</dimen>
+    <dimen name="threeHundredAndFiftySize">350dp</dimen>
+
+    <dimen name="thirtySizeSP">30sp</dimen>
+    <dimen name="fourteenSizeSP">14sp</dimen>
+    <dimen name="sixteenSizeSP">16sp</dimen>
+    <dimen name="eighteenSizeSP">18sp</dimen>
 
 
 </resources>

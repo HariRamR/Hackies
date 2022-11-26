@@ -1,18 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Splash">
+    tools:context=".ui.Splash"
+    android:background="@color/appBgClr">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hackies"
-        android:textColor="@color/black"
-        android:textSize="@dimen/thirtySize"
-        android:layout_gravity="center"
+        android:text="@string/hackies"
+        android:textColor="@color/white"
+        android:textSize="@dimen/thirtySizeSP"
+        android:layout_centerInParent="true"
         android:fontFamily="@font/heebo_bold"
         android:background="@drawable/splash_app_name_bg"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Loading stories..."
+        android:textSize="@dimen/sixteenSizeSP"
+        android:textColor="@color/black"
+        android:layout_above="@+id/progress_splash"
+        android:paddingStart="@dimen/twentySize"
+        android:layout_marginBottom="@dimen/fiveSize"/>
+
+    <ProgressBar
+        android:id="@+id/progress_splash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/tenSize"/>
+
+</RelativeLayout>

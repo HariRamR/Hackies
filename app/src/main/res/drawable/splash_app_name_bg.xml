@@ -7,7 +7,7 @@
             android:pivotY="0%"
             android:toDegrees="0" >
             <shape android:shape="rectangle" >
-                <solid android:color="@color/greyShade76" />
+                <solid android:color="@color/splashAppNameBGClr" />
             </shape>
         </rotate>
     </item>
@@ -16,7 +16,7 @@
             <padding android:left="@dimen/twentySize"
                 android:right="@dimen/thirtySize"
                 android:bottom="@dimen/tenSize"/>
-            <solid android:color="@color/greyShade76" />
+            <solid android:color="@color/splashAppNameBGClr" />
             <corners android:radius="4dp" />
         </shape>
     </item>
