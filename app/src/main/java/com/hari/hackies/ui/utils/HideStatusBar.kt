@@ -1,4 +1,4 @@
-package com.hari.hackies.common
+package com.hari.hackies.ui.utils
 
 import android.app.Activity
 import android.view.Window

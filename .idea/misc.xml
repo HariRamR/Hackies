@@ -11,8 +11,11 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/layout/bottom_sheet_comments.xml" value="0.225" />
+        <entry key="app/src/main/res/layout/bottom_sheet_reply.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/layout/list_item_comments.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/layout/list_item_dashboard.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/list_item_reply.xml" value="0.225" />
+        <entry key="app/src/main/res/layout/list_item_stories.xml" value="0.22604166666666667" />
         <entry key="app/src/main/res/menu/search_menu.xml" value="0.225" />
       </map>
     </option>

@@ -28,6 +28,7 @@
         android:layout_marginTop="@dimen/tenSize">
 
         <EditText
+            android:id="@+id/search_dashboard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawableStart="@drawable/search_icon"

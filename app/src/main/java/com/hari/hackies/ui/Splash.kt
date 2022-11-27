@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.hari.hackies.R
-import com.hari.hackies.common.HideStatusBar.hideStatusBar
+import com.hari.hackies.ui.utils.HideStatusBar.hideStatusBar
 
 class Splash : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +20,7 @@ class Splash : AppCompatActivity() {
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed({
             startActivity(Intent(this, Dashboard::class.java))
+            finish()
         }, 5000)
 
 
