@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hari.hackies.R
 import com.hari.hackies.interfaces.StoriesInterface
@@ -30,7 +31,7 @@ class ReplyAdapter(private val storiesInterface: StoriesInterface, private val r
         holder.authorNameHeaderTV.text = replyList!![position].by!!.capitalizeFirstLetter()
         holder.authorNameTV.text = replyList[position].by
         holder.dateTV.text = replyList[position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
-        holder.commentTV.text = replyList[position].text
+        holder.commentTV.text = HtmlCompat.fromHtml(replyList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     override fun getItemCount(): Int {

@@ -36,9 +36,8 @@ internal class ConvertTime {
         }
 
         private fun getMillisFromNow(commentedAt: Long): Long {
-//        val commentedAtMillis = commentedAt.time
             val nowMillis = System.currentTimeMillis()
-            return nowMillis - commentedAt
+            return nowMillis - (commentedAt * 1000)
         }
 
         private fun formatMinutes(minutes: Long): String {

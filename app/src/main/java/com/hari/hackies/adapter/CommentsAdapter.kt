@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.hari.hackies.R
@@ -32,7 +33,7 @@ class CommentsAdapter(private val storiesInterface: StoriesInterface, private va
         holder.authorNameHeaderTV.text = commentsList!![position].by!!.capitalizeFirstLetter()
         holder.authorNameTV.text = commentsList[position].by
         holder.dateTV.text = commentsList[position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
-        holder.commentTV.text = commentsList[position].text
+        holder.commentTV.text = HtmlCompat.fromHtml(commentsList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
         holder.replyTV.text = commentsList[position].kids.size.toString()
 
         holder.replyTV.setOnClickListener {

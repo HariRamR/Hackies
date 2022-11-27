@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -18,8 +19,10 @@ import com.hari.hackies.interfaces.StoriesInterface
 import com.hari.hackies.model.CommentModel
 import com.hari.hackies.model.ReplyModel
 import com.hari.hackies.model.StoryModel
+import com.hari.hackies.ui.utils.ConvertTime
 import com.hari.hackies.ui.utils.DisplaySize
 import com.hari.hackies.ui.utils.HideStatusBar.hideStatusBar
+import com.hari.hackies.viewmodel.StoriesViewModel
 
 class Dashboard: AppCompatActivity(), StoriesInterface {
 
@@ -63,7 +66,7 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
         commentTVReply = replyBottomSheetDialog.findViewById(R.id.comment_bottom_sheet_reply)!!
 
         val storiesRecycler = findViewById<RecyclerView>(R.id.recycler_dashboard)
-        storiesAdapter = StoriesAdapter(this, listOf(createDummyStoryModel(), createDummyStoryModel2(), createDummyStoryModel(), createDummyStoryModel2()))
+        storiesAdapter = StoriesAdapter(this)
         storiesRecycler!!.layoutManager = LinearLayoutManager(this)
         storiesRecycler.adapter = storiesAdapter
 
@@ -95,6 +98,18 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
         backBtnReply.setOnClickListener {
             replyBottomSheetDialog.dismiss()
         }
+
+        val viewModel = StoriesViewModel()
+        viewModel.getStoriesData().observe(this, Observer {
+
+            run {
+                for(story in it){
+                    val date = ConvertTime.format(story.time!!)
+                    story.date = date
+                }
+                storiesAdapter.setStoryData(it)
+            }
+        })
     }
 
     override fun showCommentsBottomSheetDialog(id: Int, pos: Int) {
@@ -118,22 +133,22 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
     }
 
     fun createDummyStoryModel(): StoryModel{
-        return StoryModel("hari ram", 0, 123412, arrayListOf(122, 2133, 1223), 100, 1669394133,
+        return StoryModel(12343423, "hari ram", 3, arrayListOf(122, 2133, 1223), 100, 1669394133,
             "10 hours ago", "The Insane Scale of Europe’s New Mega-Tunnel", "story",
             "https://www.youtube.com/watch?v=QiYvXKQksgI")
     }
     fun createDummyStoryModel2(): StoryModel{
-        return StoryModel("Vinoth", 0, 123412, arrayListOf(122, 2133, 1223), 100, 1669394133,
+        return StoryModel(2343443, "Vinoth",  3, arrayListOf(122, 2133, 1223), 100, 1669394133,
             "1 year ago", "Researcher: Apple’s pseudo-VPN abused for ad fraud", "story",
             "https://techaint.com/2022/11/23/researcher-apples-pseudo-vpn-abused-for-ad-fraud/")
     }
     fun createDummyCommentModel(): CommentModel{
-        return CommentModel("Latha", 123412, arrayListOf(122, 2133), 123412, "It has been around 17 years now. It still amazes me that so much high quality and informative content like this is made on a near daily basis",
+        return CommentModel(123412, "Latha", arrayListOf(122, 2133), 123412, "It has been around 17 years now. It still amazes me that so much high quality and informative content like this is made on a near daily basis",
             1669394133,  "5 hours ago",
             "comment")
     }
     fun createDummyReplyModel(): ReplyModel{
-        return ReplyModel("ramasamy", 123412, arrayListOf(122, 2133), 123412, "you are right!!",
+        return ReplyModel( 123412, "ramasamy", arrayListOf(122, 2133), 123412, "you are right!!",
             1669394133,  "2 hours ago",
             "comment")
     }

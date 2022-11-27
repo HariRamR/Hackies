@@ -15,10 +15,17 @@ import com.hari.hackies.ui.utils.StringExtensions.capitalizeFirstLetter
 import java.util.*
 import kotlin.collections.ArrayList
 
-open class StoriesAdapter(private val storiesInterface: StoriesInterface, private val storiesList:List<StoryModel> = listOf()):
+open class StoriesAdapter(private val storiesInterface: StoriesInterface):
     RecyclerView.Adapter<StoriesAdapter.MainViewHolder>(), Filterable {
 
-    private var filteredData: List<StoryModel> = storiesList
+    private var storiesList:List<StoryModel>?= null
+    private var filteredData: List<StoryModel>?= null
+
+    fun setStoryData(storiesList: List<StoryModel>){
+        this.storiesList = storiesList
+        this.filteredData = storiesList
+        notifyDataSetChanged()
+    }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val storyTitleHeaderTV = itemView.findViewById<TextView>(R.id.story_title_header_list_stories)!!
@@ -36,23 +43,23 @@ open class StoriesAdapter(private val storiesInterface: StoriesInterface, privat
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
-        holder.storyTitleHeaderTV.text = filteredData[position].title!!.capitalizeFirstLetter()
-        holder.storyTitleTV.text = filteredData[position].title!!.capitalizeFirstLetter()
-        holder.authorNameTV.text = filteredData[position].by
-        holder.dateTV.text = filteredData[position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
-        holder.scoreTV.text = if(filteredData[position].score != null) filteredData[position].score.toString() else "0"
-        holder.commentsCountTV.text = String.format("%s%s", "Comments  ", filteredData[position].kids.size)
+        holder.storyTitleHeaderTV.text = filteredData!![position].title!!.capitalizeFirstLetter()
+        holder.storyTitleTV.text = filteredData!![position].title!!.capitalizeFirstLetter()
+        holder.authorNameTV.text = filteredData!![position].by
+        holder.dateTV.text = filteredData!![position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
+        holder.scoreTV.text = if(filteredData!![position].score != null) filteredData!![position].score.toString() else "0"
+        holder.commentsCountTV.text = String.format("%s%s", "Comments  ", filteredData!![position].kids.size)
 
         holder.commentsCountTV.setOnClickListener {
 
-            if (filteredData[position].kids.size > 0)
-                storiesInterface.showCommentsBottomSheetDialog(filteredData[position].id!!, position)
+            if (filteredData!![position].kids.size > 0)
+                storiesInterface.showCommentsBottomSheetDialog(filteredData!![position].id!!, position)
             else Snackbar.make(holder.itemView, "This story has no comments", Snackbar.LENGTH_SHORT).show()
         }
     }
 
     override fun getItemCount(): Int {
-        return filteredData.size
+        return filteredData!!.size
     }
 
     override fun getFilter(): Filter {
@@ -63,7 +70,7 @@ open class StoriesAdapter(private val storiesInterface: StoriesInterface, privat
 
                 val filterString = constraint.toString().lowercase(Locale.getDefault())
                 val results = FilterResults()
-                val list: List<StoryModel> = storiesList
+                val list: List<StoryModel> = storiesList!!
                 val count = list.size
                 val nlist = ArrayList<StoryModel>(count)
                 var title: String
