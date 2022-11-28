@@ -11,8 +11,15 @@ import com.hari.hackies.interfaces.StoriesInterface
 import com.hari.hackies.model.ReplyModel
 import com.hari.hackies.ui.utils.StringExtensions.capitalizeFirstLetter
 
-class ReplyAdapter(private val storiesInterface: StoriesInterface, private val replyList:List<ReplyModel>?= listOf()):
+class ReplyAdapter(private val storiesInterface: StoriesInterface):
     RecyclerView.Adapter<ReplyAdapter.MainViewHolder>() {
+
+    private val regex = Regex("[^A-Za-z0-9 ]")
+    private var replyList:List<ReplyModel> = listOf()
+
+    fun setReplyData(replyList:List<ReplyModel>){
+        this.replyList = replyList
+    }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val authorNameHeaderTV = itemView.findViewById<TextView>(R.id.author_name_header_list_reply)!!
@@ -28,13 +35,16 @@ class ReplyAdapter(private val storiesInterface: StoriesInterface, private val r
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
-        holder.authorNameHeaderTV.text = replyList!![position].by!!.capitalizeFirstLetter()
+        var headerTxt = replyList[position].by.toString()
+        headerTxt = regex.replace(headerTxt, "")
+        holder.authorNameHeaderTV.text = headerTxt.capitalizeFirstLetter()
+
         holder.authorNameTV.text = replyList[position].by
         holder.dateTV.text = replyList[position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
         holder.commentTV.text = HtmlCompat.fromHtml(replyList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     override fun getItemCount(): Int {
-        return replyList!!.size
+        return replyList.size
     }
 }

@@ -1,53 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_layput_dashboard"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingStart="@dimen/twentySize"
-    android:paddingEnd="@dimen/twentySize"
-    tools:context=".ui.Splash"
-    android:background="@color/appBgClr">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/stories"
-        android:textColor="@color/black"
-        android:textSize="@dimen/thirtySizeSP"
-        android:layout_gravity="center"
-        android:fontFamily="@font/heebo_bold"
-        android:textStyle="bold"/>
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/fiftySize"
-        app:cardCornerRadius="@dimen/thirtySize"
-        app:cardElevation="@dimen/zeroSize"
-        android:layout_marginTop="@dimen/tenSize">
-
-        <EditText
-            android:id="@+id/search_dashboard"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawableStart="@drawable/search_icon"
-            android:drawablePadding="@dimen/tenSize"
-            android:background="@color/transparent"
-            android:hint="@string/search_stories"
-            android:textColor="@color/black"
-            android:textSize="@dimen/eighteenSizeSP"
-            android:layout_marginStart="@dimen/tenSize"
-            android:layout_marginEnd="@dimen/tenSize"/>
-
-    </androidx.cardview.widget.CardView>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_dashboard"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:paddingTop="@dimen/twentySize"
-        android:paddingBottom="@dimen/twentySize"/>
+        android:background="@color/appBgClr"
+        android:paddingStart="@dimen/twentySize"
+        android:paddingEnd="@dimen/twentySize"
+        tools:context=".ui.Splash">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/stories_txt_dashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/heebo_bold"
+            android:text="@string/stories"
+            android:textColor="@color/black"
+            android:textSize="@dimen/thirtySizeSP"
+            android:textStyle="bold" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/search_card_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/fiftySize"
+            android:layout_marginTop="@dimen/tenSize"
+            app:cardCornerRadius="@dimen/thirtySize"
+            app:cardElevation="@dimen/zeroSize"
+            android:layout_below="@+id/stories_txt_dashboard">
+
+            <EditText
+                android:id="@+id/search_dashboard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/tenSize"
+                android:layout_marginEnd="@dimen/tenSize"
+                android:background="@color/transparent"
+                android:drawableStart="@drawable/search_icon"
+                android:drawablePadding="@dimen/tenSize"
+                android:hint="@string/search_stories"
+                android:textColor="@color/black"
+                android:textSize="@dimen/eighteenSizeSP" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_dashboard"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:layout_below="@+id/search_card_dashboard"
+            android:paddingTop="@dimen/twentySize"
+            android:paddingBottom="@dimen/twentySize" />
+
+        <TextView
+            android:id="@+id/error_dashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:drawableTopCompat="@drawable/error_icon"
+            android:text="@string/something_went_wrong_try_again_later"
+            android:textSize="@dimen/sixteenSizeSP"
+            android:textColor="@color/secondaryTxtClr"
+            android:drawablePadding="@dimen/tenSize"
+            android:visibility="gone"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/move_to_top_dashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fabSize="mini"
+            android:src="@drawable/arrow_upward"
+            app:backgroundTint="@color/bottomSheetHandleClr"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/fiftySize"/>
+
+    </RelativeLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

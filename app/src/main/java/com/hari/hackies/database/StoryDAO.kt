@@ -10,7 +10,7 @@ import com.hari.hackies.model.StoryModel
 interface StoryDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertStory(story: StoryModel)
+    fun insertStory(story: List<StoryModel>)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertComments(comments: List<CommentModel>)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -21,8 +21,14 @@ interface StoryDAO {
     fun customQuery(query: SupportSQLiteQuery):Long
     @Query("SELECT * FROM storyMaster")
     fun getAllStories(): List<StoryModel>
-    @Query("SELECT * FROM commentMaster")
-    fun getAllComments(): List<CommentModel>
+//    @Query("SELECT * FROM commentMaster WHERE id IN (:comments)")
+//    fun getCommentsByIDs(comments: List<Int>): List<CommentModel>
+    @Query("SELECT * FROM commentMaster WHERE parent = :parentID")
+    fun getCommentsByParentID(parentID: Int): List<CommentModel>
+//    @Query("SELECT * FROM replyMaster WHERE id IN (:replies)")
+//    fun getRepliesByIDs(replies: List<Int>): List<ReplyModel>
+    @Query("SELECT * FROM replyMaster WHERE parent = :parentID")
+    fun getRepliesByParentID(parentID: Int): List<ReplyModel>
     @Query("SELECT * FROM replyMaster")
     fun getAllReplies(): List<ReplyModel>
     @Query("SELECT id FROM storyMaster")

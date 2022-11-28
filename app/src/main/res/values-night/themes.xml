@@ -11,7 +11,7 @@
         <item name="colorSecondaryVariant">@color/colorPrimary</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/transparent</item>
+<!--        <item name="android:statusBarColor" tools:targetApi="l">@color/transparent</item>-->
         <item name="android:fontFamily">@font/noto_sans_medium</item>
         <item name="fontFamily">@font/noto_sans_medium</item>
         <!-- Customize your theme here. -->

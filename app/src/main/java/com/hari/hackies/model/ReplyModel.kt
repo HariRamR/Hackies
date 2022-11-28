@@ -15,6 +15,6 @@ data class ReplyModel (
     @SerializedName("text") var text: String?= null,
     @SerializedName("time") var time: Long?= null,
     @SerializedName("date") var date: String?= null,
-    @SerializedName("type") var type: String?= null
-
+    @SerializedName("type") var type: String?= null,
+    @SerializedName("nameBGClr") var nameBGClr: Int?= null
 )

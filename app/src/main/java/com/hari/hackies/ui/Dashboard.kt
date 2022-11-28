@@ -1,8 +1,10 @@
 package com.hari.hackies.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,21 +12,24 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.hari.hackies.R
 import com.hari.hackies.adapter.CommentsAdapter
 import com.hari.hackies.adapter.ReplyAdapter
 import com.hari.hackies.adapter.StoriesAdapter
 import com.hari.hackies.interfaces.StoriesInterface
 import com.hari.hackies.model.CommentModel
-import com.hari.hackies.model.ReplyModel
 import com.hari.hackies.model.StoryModel
 import com.hari.hackies.ui.utils.ConvertTime
 import com.hari.hackies.ui.utils.DisplaySize
-import com.hari.hackies.ui.utils.HideStatusBar.hideStatusBar
-import com.hari.hackies.viewmodel.StoriesViewModel
+import com.hari.hackies.viewmodel.CommentViewModel
+import com.hari.hackies.viewmodel.StoryViewModel
+import io.reactivex.disposables.CompositeDisposable
 
-class Dashboard: AppCompatActivity(), StoriesInterface {
+
+class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var commentBottomSheetDialog: BottomSheetDialog
     private lateinit var replyBottomSheetDialog: BottomSheetDialog
@@ -36,10 +41,15 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
     private lateinit var authorNameTVReply: TextView
     private lateinit var dateTVReply: TextView
     private lateinit var commentTVReply: TextView
+    private lateinit var errorTV: TextView
+    private lateinit var viewModel: StoryViewModel
+    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private val disposable = CompositeDisposable()
+    private var selectedStoryPos: Int?= 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        hideStatusBar(this)
+//        hideStatusBar(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -51,6 +61,8 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
 
     private fun initViews(){
 
+        swipeRefreshLayout = findViewById(R.id.swipe_layput_dashboard)
+        swipeRefreshLayout.setOnRefreshListener(this)
         commentBottomSheetDialog = BottomSheetDialog(this)
         replyBottomSheetDialog = BottomSheetDialog(this)
         commentBottomSheetDialog.setContentView(R.layout.bottom_sheet_comments)
@@ -71,27 +83,30 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
         storiesRecycler.adapter = storiesAdapter
 
         val commentsRecycler = commentBottomSheetDialog.findViewById<RecyclerView>(R.id.comments_recycler_bottom_sheet)
-        commentsAdapter = CommentsAdapter(this, listOf(createDummyCommentModel(), createDummyCommentModel(), createDummyCommentModel()))
+        commentsAdapter = CommentsAdapter(this)
         commentsRecycler!!.layoutManager = LinearLayoutManager(this)
         commentsRecycler.adapter = commentsAdapter
 
         val replyRecycler = replyBottomSheetDialog.findViewById<RecyclerView>(R.id.comments_recycler_bottom_sheet_reply)
-        replyAdapter = ReplyAdapter(this, listOf(createDummyReplyModel(), createDummyReplyModel()))
+        replyAdapter = ReplyAdapter(this)
         replyRecycler!!.layoutManager = LinearLayoutManager(this)
         replyRecycler.adapter = replyAdapter
 
+        errorTV = findViewById(R.id.error_dashboard)
+        val moveToTopBtn = findViewById<FloatingActionButton>(R.id.move_to_top_dashboard)
+        moveToTopBtn.setOnClickListener {
+            val layoutManager: LinearLayoutManager = storiesRecycler.layoutManager as LinearLayoutManager
+            layoutManager.scrollToPositionWithOffset(0, 0)
+        }
+
         val search = findViewById<EditText>(R.id.search_dashboard)
         search.addTextChangedListener(object : TextWatcher {
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
                 storiesAdapter.filter.filter(s.toString())
             }
-
-            override fun beforeTextChanged(
-                s: CharSequence, start: Int, count: Int,
-                after: Int
-            ) {
-            }
-
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         })
 
@@ -99,22 +114,48 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
             replyBottomSheetDialog.dismiss()
         }
 
-        val viewModel = StoriesViewModel()
+        viewModel = StoryViewModel.getInstance(application)
         viewModel.getStoriesData().observe(this, Observer {
 
-            run {
                 for(story in it){
                     val date = ConvertTime.format(story.time!!)
                     story.date = date
                 }
                 storiesAdapter.setStoryData(it)
+        })
+        viewModel.isError().observe(this, Observer {
+            if (it){
+                storiesRecycler.visibility = View.GONE
+                errorTV.visibility = View.VISIBLE
+            }else{
+                errorTV.visibility = View.GONE
+                storiesRecycler.visibility = View.VISIBLE
             }
         })
+
+        commentBottomSheetDialog.setOnDismissListener {
+            storiesAdapter.notifyItemChanged(selectedStoryPos!!)
+        }
     }
 
-    override fun showCommentsBottomSheetDialog(id: Int, pos: Int) {
-        // check for comment size and if > 0 and comments table has no data then fetch from api
+    override fun showCommentsBottomSheetDialog(storyModel: StoryModel, pos: Int) {
+
         if(!commentBottomSheetDialog.isShowing){
+
+            selectedStoryPos = pos
+            storyModel.isSelected = false
+            val viewModel = CommentViewModel.getInstance(application)
+            viewModel.initCommentRepo(disposable, storyModel)
+
+            viewModel.getCommentsData().observe(this, Observer {
+
+                for(comment in it){
+                    val date = ConvertTime.format(comment.time!!)
+                    comment.date = date
+                }
+                commentsAdapter.setCommentData(it)
+            })
+
             commentBottomSheetDialog.show()
         }
     }
@@ -132,24 +173,17 @@ class Dashboard: AppCompatActivity(), StoriesInterface {
         }
     }
 
-    fun createDummyStoryModel(): StoryModel{
-        return StoryModel(12343423, "hari ram", 3, arrayListOf(122, 2133, 1223), 100, 1669394133,
-            "10 hours ago", "The Insane Scale of Europe’s New Mega-Tunnel", "story",
-            "https://www.youtube.com/watch?v=QiYvXKQksgI")
+    override fun onRefresh() {
+
+        viewModel.isLoading().observe(this, Observer {
+            swipeRefreshLayout.isRefreshing = it
+        })
+        viewModel.isLoading.value = true
+        viewModel.initStoryRepo(this, disposable, false)
     }
-    fun createDummyStoryModel2(): StoryModel{
-        return StoryModel(2343443, "Vinoth",  3, arrayListOf(122, 2133, 1223), 100, 1669394133,
-            "1 year ago", "Researcher: Apple’s pseudo-VPN abused for ad fraud", "story",
-            "https://techaint.com/2022/11/23/researcher-apples-pseudo-vpn-abused-for-ad-fraud/")
-    }
-    fun createDummyCommentModel(): CommentModel{
-        return CommentModel(123412, "Latha", arrayListOf(122, 2133), 123412, "It has been around 17 years now. It still amazes me that so much high quality and informative content like this is made on a near daily basis",
-            1669394133,  "5 hours ago",
-            "comment")
-    }
-    fun createDummyReplyModel(): ReplyModel{
-        return ReplyModel( 123412, "ramasamy", arrayListOf(122, 2133), 123412, "you are right!!",
-            1669394133,  "2 hours ago",
-            "comment")
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.dispose()
     }
 }

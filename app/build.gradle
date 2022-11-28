@@ -15,6 +15,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 
         javaCompileOptions {
             annotationProcessorOptions {
@@ -47,21 +48,34 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.3"
     implementation "com.squareup.okhttp3:okhttp:4.9.3"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+
+    //RX Java
+    implementation "io.reactivex.rxjava2:rxjava:2.2.7"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
     //Kotlin Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
     // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
+    def live_data_version = "2.5.1"
+    implementation "androidx.lifecycle:lifecycle-common:$live_data_version"
+    implementation "androidx.lifecycle:lifecycle-runtime:$live_data_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$live_data_version"
 
     // Room components
     def room_version = "2.4.3"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //Swipe to refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

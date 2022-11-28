@@ -7,6 +7,7 @@
     android:background="@color/appBgClr">
 
     <TextView
+        android:id="@+id/hackies_txt_splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hackies"

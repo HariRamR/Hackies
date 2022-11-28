@@ -12,8 +12,15 @@ import com.hari.hackies.interfaces.StoriesInterface
 import com.hari.hackies.model.CommentModel
 import com.hari.hackies.ui.utils.StringExtensions.capitalizeFirstLetter
 
-class CommentsAdapter(private val storiesInterface: StoriesInterface, private val commentsList:List<CommentModel>?= listOf()):
+class CommentsAdapter(private val storiesInterface: StoriesInterface):
     RecyclerView.Adapter<CommentsAdapter.MainViewHolder>() {
+
+    private var commentsList:List<CommentModel> = listOf()
+    private val regex = Regex("[^A-Za-z0-9 ]")
+
+    fun setCommentData(commentsList:List<CommentModel>){
+        this.commentsList = commentsList
+    }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val authorNameHeaderTV = itemView.findViewById<TextView>(R.id.author_name_header_list_comments)!!
@@ -30,7 +37,10 @@ class CommentsAdapter(private val storiesInterface: StoriesInterface, private va
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
-        holder.authorNameHeaderTV.text = commentsList!![position].by!!.capitalizeFirstLetter()
+        var headerTxt = commentsList[position].by.toString()
+        headerTxt = regex.replace(headerTxt, "")
+        holder.authorNameHeaderTV.text = headerTxt.capitalizeFirstLetter()
+
         holder.authorNameTV.text = commentsList[position].by
         holder.dateTV.text = commentsList[position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
         holder.commentTV.text = HtmlCompat.fromHtml(commentsList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
@@ -38,7 +48,7 @@ class CommentsAdapter(private val storiesInterface: StoriesInterface, private va
 
         holder.replyTV.setOnClickListener {
 
-            if (commentsList.get(position).kids.size > 0)
+            if (commentsList[position].kids.size > 0)
             storiesInterface.showReplyBottomSheetDialog(commentsList[position], position)
             else Snackbar.make(holder.itemView, "This comment has no reply", Snackbar.LENGTH_SHORT).show()
         }

@@ -1,8 +1,9 @@
 package com.hari.hackies.interfaces
 
 import com.hari.hackies.model.CommentModel
+import com.hari.hackies.model.StoryModel
 
 interface StoriesInterface {
-    fun showCommentsBottomSheetDialog(id: Int, pos: Int)
+    fun showCommentsBottomSheetDialog(storyModel: StoryModel, pos: Int)
     fun showReplyBottomSheetDialog(commentModel: CommentModel, pos: Int)
 }
