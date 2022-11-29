@@ -7,4 +7,9 @@
     <string name="comments">Comments</string>
     <string name="reply">Reply</string>
     <string name="something_went_wrong_try_again_later">Something went wrong. Try again later</string>
+    <string name="no_data_available">No data available</string>
+    <string name="comment_deleted_txt">This comment was deleted by it\'s author</string>
+    <string name="comment_not_active_txt">This comment is not active</string>
+    <string name="story_deleted_txt">This story was deleted by it\'s author</string>
+    <string name="story_not_active_txt">This story is not active</string>
 </resources>

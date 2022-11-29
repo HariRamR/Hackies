@@ -9,6 +9,8 @@ data class CommentModel (
 
     @PrimaryKey(autoGenerate = false)
     @SerializedName("id") var id: Int?= null,
+    @SerializedName("deleted") var deleted: Boolean?= false,
+    @SerializedName("dead") var dead: Boolean? = false,
     @SerializedName("by") var by: String?= null,
     @SerializedName("kids") var kids: ArrayList<Int> = arrayListOf(),
     @SerializedName("parent") var parent: Int?= null,

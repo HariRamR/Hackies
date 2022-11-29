@@ -29,8 +29,17 @@
         android:includeFontPadding="false"
         android:layout_marginTop="@dimen/twentySize"/>
 
+    <ProgressBar
+        android:id="@+id/progress_bottom_sheet_comments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:layout_marginTop="@dimen/tenSize"
+        android:visibility="gone"/>
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comments_recycler_bottom_sheet"
+        android:id="@+id/recycler_bottom_sheet_comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"

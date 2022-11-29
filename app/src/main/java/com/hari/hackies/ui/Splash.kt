@@ -25,7 +25,7 @@ class Splash : AppCompatActivity() {
         splashNameTV.startAnimation(slideAnimation)
 
         val viewModel = StoryViewModel.getInstance(application)
-        viewModel.initStoryRepo(this, disposable, true)
+        viewModel.initStoryRepo(this, disposable, true, this)
     }
 
     override fun onDestroy() {

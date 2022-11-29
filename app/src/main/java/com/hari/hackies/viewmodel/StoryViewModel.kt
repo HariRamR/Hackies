@@ -2,6 +2,7 @@ package com.hari.hackies.viewmodel
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,12 +17,12 @@ class StoryViewModel: ViewModel() {
     var storyList: MutableLiveData<List<StoryModel>> = MutableLiveData<List<StoryModel>>()
     private var storyRepo: StoryRepo?= null
     var isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
-    var isError: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
-    var dao: StoryDAO?= null
+    var isNoData: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
     companion object{
 
         private var database: StoryDatabase?= null
+        var dao: StoryDAO?= null
 
         private var storyViewModel: StoryViewModel?= null
         private var application: Application?= null
@@ -32,23 +33,23 @@ class StoryViewModel: ViewModel() {
                 storyViewModel = StoryViewModel()
                 this.application = application
                 database = StoryDatabase.getInstance(application)
+                dao = database!!.getStoryDAO()
             }
             return storyViewModel!!
         }
     }
 
-    fun initStoryRepo(activity: Activity, disposable: CompositeDisposable, moveToDashboard: Boolean){
-        dao = database!!.getStoryDAO()
+    fun initStoryRepo(activity: Activity, disposable: CompositeDisposable, moveToDashboard: Boolean, context: Context){
         storyRepo = StoryRepo(disposable, storyViewModel!!, activity, moveToDashboard)
-        storyRepo!!.getSourceFromAPI()
+        storyRepo!!.getSourceFromAPI(context)
     }
 
     fun isLoading(): LiveData<Boolean>{
         return isLoading
     }
 
-    fun isError(): LiveData<Boolean>{
-        return isError
+    fun isNoData(): LiveData<Boolean>{
+        return isNoData
     }
 
     fun getStoriesData(): LiveData<List<StoryModel>>{

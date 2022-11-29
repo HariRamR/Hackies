@@ -8,17 +8,18 @@ import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hari.hackies.R
 import com.hari.hackies.interfaces.StoriesInterface
+import com.hari.hackies.model.CommentModel
 import com.hari.hackies.model.ReplyModel
 import com.hari.hackies.ui.utils.StringExtensions.capitalizeFirstLetter
 
-class ReplyAdapter(private val storiesInterface: StoriesInterface):
-    RecyclerView.Adapter<ReplyAdapter.MainViewHolder>() {
+class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.MainViewHolder>() {
 
     private val regex = Regex("[^A-Za-z0-9 ]")
-    private var replyList:List<ReplyModel> = listOf()
+    private var replyList:List<CommentModel> = listOf()
 
-    fun setReplyData(replyList:List<ReplyModel>){
+    fun setReplyData(replyList:List<CommentModel>){
         this.replyList = replyList
+        notifyDataSetChanged()
     }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,13 +36,25 @@ class ReplyAdapter(private val storiesInterface: StoriesInterface):
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
-        var headerTxt = replyList[position].by.toString()
-        headerTxt = regex.replace(headerTxt, "")
-        holder.authorNameHeaderTV.text = headerTxt.capitalizeFirstLetter()
+        if (replyList[position].deleted!! || replyList[position].dead!!){
 
-        holder.authorNameTV.text = replyList[position].by
-        holder.dateTV.text = replyList[position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
-        holder.commentTV.text = HtmlCompat.fromHtml(replyList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            holder.authorNameHeaderTV.text = "D"
+            holder.authorNameTV.visibility = View.GONE
+            holder.dateTV.text = replyList[position].date
+            holder.commentTV.text = holder.itemView.context
+                .getString(if(replyList[position].deleted!!) R.string.comment_deleted_txt
+                else R.string.comment_not_active_txt)
+        }else{
+
+            holder.authorNameTV.visibility = View.VISIBLE
+            var headerTxt = replyList[position].by.toString()
+            headerTxt = regex.replace(headerTxt, "")
+            holder.authorNameHeaderTV.text = headerTxt.capitalizeFirstLetter()
+
+            holder.authorNameTV.text = replyList[position].by
+            holder.dateTV.text = replyList[position].date
+            holder.commentTV.text = HtmlCompat.fromHtml(replyList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        }
     }
 
     override fun getItemCount(): Int {

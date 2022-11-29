@@ -1,14 +1,12 @@
 package com.hari.hackies.repository
 
-import android.content.Intent
+import android.content.Context
 import android.graphics.Color
-import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.hari.hackies.api.ApiClient
 import com.hari.hackies.model.CommentModel
-import com.hari.hackies.model.StoryModel
-import com.hari.hackies.ui.Dashboard
+import com.hari.hackies.ui.utils.CheckInternet
 import com.hari.hackies.viewmodel.CommentViewModel
-import com.hari.hackies.viewmodel.StoryViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -17,32 +15,48 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import retrofit2.Response
 import java.util.*
-import kotlin.collections.ArrayList
 
-class CommentRepo(private val disposable: CompositeDisposable, private val viewModel: CommentViewModel) {
+class CommentRepo(private val disposable: CompositeDisposable, private val viewModel: CommentViewModel?= null,
+                  private val commentList: MutableLiveData<List<CommentModel>>, private val isLoading: MutableLiveData<Boolean>) {
 
-    fun checkAndDownloadComments(commentIDs: ArrayList<Int>, parentId: Int){
+    /*companion object{
 
-        runBlocking {
+        private var commentRepo: CommentRepo?= null
+        fun getInstance(disposable: CompositeDisposable, viewModel: CommentViewModel?= null,
+                        commentList: MutableLiveData<List<CommentModel>>, isLoading: MutableLiveData<Boolean>): CommentRepo{
+            if(commentRepo == null){
+                commentRepo = CommentRepo(disposable, viewModel, commentList, isLoading)
+            }
+            return commentRepo!!
+        }
+    }*/
 
-            val localComments = getCommentsByParentID(parentId)
-            if (localComments.size == commentIDs.size)
-                viewModel.commentList.value = localComments
-            else{
+    fun checkAndDownloadComments(commentIDs: ArrayList<Int>, parentId: Int, context: Context){
 
-                val localCommentIDs = ArrayList<Int>()
-                localComments.forEach {
-                    comment -> localCommentIDs.add(comment.id!!)
-                }
-                val fetchList = arrayListOf<Observable<Response<CommentModel>>>()
-                commentIDs.forEach {
-                    id -> if (!localCommentIDs.contains(id)){
+        if (!CheckInternet.isInternetAvailable(context)){
+            doResultAction(parentId)
+        }else {
+            runBlocking {
+
+                val localComments = getCommentsByParentID(parentId)
+                if (localComments.size == commentIDs.size)
+                    commentList.value = localComments
+                else{
+
+                    val localCommentIDs = ArrayList<Int>()
+                    localComments.forEach {
+                            comment -> localCommentIDs.add(comment.id!!)
+                    }
+                    val fetchList = arrayListOf<Observable<Response<CommentModel>>>()
+                    commentIDs.forEach {
+                            id -> if (!localCommentIDs.contains(id)){
                         fetchList.add(callComment(id))
                     }
-                }
+                    }
 
-                if (fetchList.size == 0) doResultAction(parentId)
-                else disposable.add(getCommentsFromAPI(fetchList, parentId))
+                    if (fetchList.size == 0) doResultAction(parentId)
+                    else disposable.add(getCommentsFromAPI(fetchList, parentId))
+                }
             }
         }
     }
@@ -61,11 +75,13 @@ class CommentRepo(private val disposable: CompositeDisposable, private val viewM
                     val random = Random()
                     val nameBgClr = Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256))
                     comment!!.nameBGClr = nameBgClr
-//                    insertComments(comment)
                     commentList.add(comment)
                 }
             }
-            insertComments(commentList)
+            runBlocking {
+
+                insertComments(commentList)
+            }
         }.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
             {
                 doResultAction(parentId)
@@ -78,21 +94,29 @@ class CommentRepo(private val disposable: CompositeDisposable, private val viewM
 
     private fun doResultAction(parentId: Int){
         runBlocking {
-            val commentList = getCommentsByParentID(parentId)
-            viewModel.commentList.value = commentList
+            val comments = getCommentsByParentID(parentId)
+            if (comments.isEmpty()){
+                viewModel!!.isNetAvailable.value = false
+                commentList.value = listOf()
+            }else
+                commentList.value = comments
         }
-        viewModel.isLoading.value = false
+        isLoading.value = false
     }
 
     private fun callComment(id: Int): Observable<Response<CommentModel>> {
         return ApiClient.getClient()!!.getCommentData(id.toString())
     }
 
-    private fun insertComments(comments: ArrayList<CommentModel>){
+    private suspend fun insertComments(comments: ArrayList<CommentModel>){
 
-        GlobalScope.async {
-            viewModel.dao!!.insertComments(comments)
-        }
+        val differ = ArrayList<Deferred<List<Long>>>()
+        differ.add(
+            GlobalScope.async {
+                CommentViewModel.dao!!.insertComments(comments)
+            }
+        )
+        differ.awaitAll()
     }
 
     private suspend fun getCommentsByParentID(parentId: Int): List<CommentModel>{
@@ -100,7 +124,7 @@ class CommentRepo(private val disposable: CompositeDisposable, private val viewM
         val differ = ArrayList<Deferred<List<CommentModel>>>()
         differ.add(
             GlobalScope.async {
-                viewModel.dao!!.getCommentsByParentID(parentId)
+                CommentViewModel.dao!!.getCommentsByParentID(parentId)
             }
         )
         return differ.awaitAll()[0]

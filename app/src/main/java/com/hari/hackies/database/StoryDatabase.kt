@@ -7,7 +7,7 @@ import com.hari.hackies.model.CommentModel
 import com.hari.hackies.model.ReplyModel
 import com.hari.hackies.model.StoryModel
 
-@Database(entities = [StoryModel::class, CommentModel::class, ReplyModel::class], version = 1)
+@Database(entities = [StoryModel::class, CommentModel::class], version = 1)
 @TypeConverters(TypeConverterDB::class)
 abstract class StoryDatabase: RoomDatabase() {
 

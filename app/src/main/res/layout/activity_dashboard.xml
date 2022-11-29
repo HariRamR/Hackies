@@ -7,6 +7,7 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/root_relative_dashboard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/appBgClr"
@@ -65,6 +66,18 @@
             android:layout_centerInParent="true"
             app:drawableTopCompat="@drawable/error_icon"
             android:text="@string/something_went_wrong_try_again_later"
+            android:textSize="@dimen/sixteenSizeSP"
+            android:textColor="@color/secondaryTxtClr"
+            android:drawablePadding="@dimen/tenSize"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/no_data_dashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:drawableTopCompat="@drawable/no_data_icon"
+            android:text="@string/no_data_available"
             android:textSize="@dimen/sixteenSizeSP"
             android:textColor="@color/secondaryTxtClr"
             android:drawablePadding="@dimen/tenSize"

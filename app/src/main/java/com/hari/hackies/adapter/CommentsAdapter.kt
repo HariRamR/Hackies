@@ -20,6 +20,7 @@ class CommentsAdapter(private val storiesInterface: StoriesInterface):
 
     fun setCommentData(commentsList:List<CommentModel>){
         this.commentsList = commentsList
+        notifyDataSetChanged()
     }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -37,24 +38,36 @@ class CommentsAdapter(private val storiesInterface: StoriesInterface):
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
-        var headerTxt = commentsList[position].by.toString()
-        headerTxt = regex.replace(headerTxt, "")
-        holder.authorNameHeaderTV.text = headerTxt.capitalizeFirstLetter()
+        if (commentsList[position].deleted!! || commentsList[position].dead!!){
+            holder.authorNameHeaderTV.text = "D"
+            holder.authorNameTV.visibility = View.GONE
+            holder.dateTV.text = commentsList[position].date
+            holder.commentTV.text = holder.itemView.context
+                .getString(if(commentsList[position].deleted!!) R.string.comment_deleted_txt
+                else R.string.comment_not_active_txt)
+            holder.replyTV.text = "0"
+        }else{
 
-        holder.authorNameTV.text = commentsList[position].by
-        holder.dateTV.text = commentsList[position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
-        holder.commentTV.text = HtmlCompat.fromHtml(commentsList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        holder.replyTV.text = commentsList[position].kids.size.toString()
+            holder.authorNameTV.visibility = View.VISIBLE
+            var headerTxt = commentsList[position].by.toString()
+            headerTxt = regex.replace(headerTxt, "")
+            holder.authorNameHeaderTV.text = headerTxt.capitalizeFirstLetter()
 
-        holder.replyTV.setOnClickListener {
+            holder.authorNameTV.text = commentsList[position].by
+            holder.dateTV.text = commentsList[position].date
+            holder.commentTV.text = HtmlCompat.fromHtml(commentsList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            holder.replyTV.text = commentsList[position].kids.size.toString()
 
-            if (commentsList[position].kids.size > 0)
-            storiesInterface.showReplyBottomSheetDialog(commentsList[position], position)
-            else Snackbar.make(holder.itemView, "This comment has no reply", Snackbar.LENGTH_SHORT).show()
+            holder.replyTV.setOnClickListener {
+
+                if (commentsList[position].kids.size > 0)
+                    storiesInterface.showReplyBottomSheetDialog(commentsList[position], position)
+                else Snackbar.make(holder.itemView, "This comment has no reply", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        return commentsList!!.size
+        return commentsList.size
     }
 }

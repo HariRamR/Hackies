@@ -1,6 +1,5 @@
 package com.hari.hackies.adapter
 
-import android.graphics.ColorFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.hari.hackies.R
@@ -22,7 +19,6 @@ import com.hari.hackies.ui.Dashboard
 import com.hari.hackies.ui.fragment.StoryFrag
 import com.hari.hackies.ui.utils.StringExtensions.capitalizeFirstLetter
 import java.util.*
-import kotlin.collections.ArrayList
 
 open class StoriesAdapter(private val storiesInterface: StoriesInterface):
     RecyclerView.Adapter<StoriesAdapter.MainViewHolder>(), Filterable {
@@ -54,50 +50,66 @@ open class StoriesAdapter(private val storiesInterface: StoriesInterface):
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
 
-        var headerTxt = filteredData!![position].title.toString()
-        headerTxt = regex.replace(headerTxt, "")
-        holder.storyTitleHeaderTV.text = headerTxt.capitalizeFirstLetter()
-        val drawable = holder.storyTitleHeaderTV.background.mutate()
-        DrawableCompat.setTint(drawable, filteredData!![position].nameBGClr!!)
-        holder.storyTitleHeaderTV.background = drawable
-        holder.storyTitleTV.text = filteredData!![position].title!!.capitalizeFirstLetter()
-        holder.authorNameTV.text = filteredData!![position].by
-        holder.dateTV.text = filteredData!![position].date // need to convert unix time to date like 10hours ago while getting data from db or saving data to db
-        holder.scoreTV.text = if(filteredData!![position].score != null) filteredData!![position].score.toString() else "0"
-        holder.commentsCountTV.text = String.format("%s%s", "Comments  ", filteredData!![position].kids.size)
-
-        if (filteredData!![position].isSelected!!){
-            holder.rootLinear.setBackgroundColor(ResourcesCompat.getColor(holder.itemView.context.resources, R.color.bottomSheetHandleClr,
-            holder.itemView.context.theme))
+        if (filteredData!![position].deleted!! || filteredData!![position].dead!!){
+            holder.storyTitleHeaderTV.text = "D"
+            holder.storyTitleTV.visibility = View.GONE
+            holder.authorNameTV.text = holder.itemView.context
+                .getString(if(filteredData!![position].deleted!!) R.string.story_deleted_txt
+                else R.string.story_not_active_txt)
+            holder.scoreTV.visibility = View.GONE
+            holder.commentsCountTV.visibility = View.GONE
+            holder.dateTV.text = filteredData!![position].date
         }else{
-            holder.rootLinear.setBackgroundColor(ResourcesCompat.getColor(holder.itemView.context.resources, R.color.appBgClr,
-                holder.itemView.context.theme))
-        }
 
-        holder.storyTitleTV.setOnClickListener {
-            if (filteredData!![position].url != null && filteredData!![position].url!!.isNotEmpty()){
+            holder.storyTitleTV.visibility = View.VISIBLE
+            holder.scoreTV.visibility = View.VISIBLE
+            holder.commentsCountTV.visibility = View.VISIBLE
 
-                val fragment = StoryFrag()
-                val fragmentTransaction =
-                    (holder.itemView.context as Dashboard).supportFragmentManager.beginTransaction()
+            var headerTxt = filteredData!![position].title.toString()
+            headerTxt = regex.replace(headerTxt, "")
+            holder.storyTitleHeaderTV.text = headerTxt.capitalizeFirstLetter()
+            val drawable = holder.storyTitleHeaderTV.background.mutate()
+            DrawableCompat.setTint(drawable, filteredData!![position].nameBGClr!!)
+            holder.storyTitleHeaderTV.background = drawable
+            holder.storyTitleTV.text = filteredData!![position].title!!.capitalizeFirstLetter()
+            holder.authorNameTV.text = filteredData!![position].by
+            holder.dateTV.text = filteredData!![position].date
+            holder.scoreTV.text = if(filteredData!![position].score != null) filteredData!![position].score.toString() else "0"
+            holder.commentsCountTV.text = String.format("%s%s", "Comments  ", filteredData!![position].kids.size)
 
-                val bundle = Bundle()
-                bundle.putString("StoryURL", filteredData!![position].url)
-                fragment.arguments = bundle
-                fragment.show(fragmentTransaction, "StoryFrag")
-            }else Snackbar.make(holder.itemView, "This story has no web links", Snackbar.LENGTH_SHORT).show()
-        }
-
-        holder.commentsCountTV.setOnClickListener {
-
-            if (filteredData!![position].kids.size > 0){
-
-                filteredData!![position].isSelected = true
-                notifyItemChanged(position)
-                storiesInterface.showCommentsBottomSheetDialog(filteredData!![position], position)
+            if (filteredData!![position].isSelected!!){
+                holder.rootLinear.setBackgroundColor(ResourcesCompat.getColor(holder.itemView.context.resources, R.color.bottomSheetHandleClr,
+                    holder.itemView.context.theme))
+            }else{
+                holder.rootLinear.setBackgroundColor(ResourcesCompat.getColor(holder.itemView.context.resources, R.color.appBgClr,
+                    holder.itemView.context.theme))
             }
 
-            else Snackbar.make(holder.itemView, "This story has no comments", Snackbar.LENGTH_SHORT).show()
+            holder.storyTitleTV.setOnClickListener {
+                if (filteredData!![position].url != null && filteredData!![position].url!!.isNotEmpty()){
+
+                    val fragment = StoryFrag()
+                    val fragmentTransaction =
+                        (holder.itemView.context as Dashboard).supportFragmentManager.beginTransaction()
+
+                    val bundle = Bundle()
+                    bundle.putString("StoryURL", filteredData!![position].url)
+                    fragment.arguments = bundle
+                    fragment.show(fragmentTransaction, "StoryFrag")
+                }else Snackbar.make(holder.itemView, "This story has no web links", Snackbar.LENGTH_SHORT).show()
+            }
+
+            holder.commentsCountTV.setOnClickListener {
+
+                if (filteredData!![position].kids.size > 0){
+
+                    filteredData!![position].isSelected = true
+                    notifyItemChanged(position)
+                    storiesInterface.showCommentsBottomSheetDialog(filteredData!![position], position)
+                }
+
+                else Snackbar.make(holder.itemView, "This story has no comments", Snackbar.LENGTH_SHORT).show()
+            }
         }
     }
 

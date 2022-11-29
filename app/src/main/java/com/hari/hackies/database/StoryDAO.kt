@@ -10,27 +10,19 @@ import com.hari.hackies.model.StoryModel
 interface StoryDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertStory(story: List<StoryModel>)
+    fun insertStories(stories: List<StoryModel>)
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertComments(comments: List<CommentModel>)
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertReplies(replies: List<ReplyModel>)
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    fun updateStories(stories: List<StoryModel>)
+    fun insertComments(comments: List<CommentModel>): List<Long>
     @RawQuery
     fun customQuery(query: SupportSQLiteQuery):Long
-    @Query("SELECT * FROM storyMaster")
+    @Query("DELETE FROM storyMaster WHERE id NOT IN (SELECT id From storyMaster ORDER BY time DESC LIMIT 500)")
+    fun deleteOldStories():Int
+    @Query("DELETE FROM commentMaster WHERE parent NOT IN (SELECT id FROM storyMaster) AND parent NOT IN (SELECT id FROM commentMaster)")
+    fun deleteOldComments():Int
+    @Query("SELECT * FROM storyMaster ORDER BY time DESC")
     fun getAllStories(): List<StoryModel>
-//    @Query("SELECT * FROM commentMaster WHERE id IN (:comments)")
-//    fun getCommentsByIDs(comments: List<Int>): List<CommentModel>
-    @Query("SELECT * FROM commentMaster WHERE parent = :parentID")
+    @Query("SELECT * FROM commentMaster WHERE parent = :parentID ORDER BY time DESC")
     fun getCommentsByParentID(parentID: Int): List<CommentModel>
-//    @Query("SELECT * FROM replyMaster WHERE id IN (:replies)")
-//    fun getRepliesByIDs(replies: List<Int>): List<ReplyModel>
-    @Query("SELECT * FROM replyMaster WHERE parent = :parentID")
-    fun getRepliesByParentID(parentID: Int): List<ReplyModel>
-    @Query("SELECT * FROM replyMaster")
-    fun getAllReplies(): List<ReplyModel>
     @Query("SELECT id FROM storyMaster")
     fun getStoryIDs(): List<Int>
 }

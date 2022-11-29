@@ -19,7 +19,4 @@ interface ApiInterface {
 
     @GET("item/{id}.json")
     fun getCommentData(@Path("id") id: String?): Observable<Response<CommentModel>>
-
-    @GET("item/{id}.json")
-    fun getReplyData(@Path("id") id: String?): Observable<Response<ReplyModel>>
 }

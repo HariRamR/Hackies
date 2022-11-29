@@ -9,6 +9,8 @@ data class StoryModel (
 
     @PrimaryKey(autoGenerate = false)
     @SerializedName("id") var id: Int?= null,
+    @SerializedName("deleted" ) var deleted : Boolean?= false,
+    @SerializedName("dead") var dead: Boolean? = false,
     @SerializedName("by") var by: String?= null,
     @SerializedName("descendants") var descendants: Int?= null,
     @SerializedName("kids") var kids: ArrayList<Int> = arrayListOf(),
