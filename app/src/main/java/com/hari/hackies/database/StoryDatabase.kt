@@ -2,9 +2,7 @@ package com.hari.hackies.database
 
 import android.app.Application
 import androidx.room.*
-import androidx.room.migration.AutoMigrationSpec
 import com.hari.hackies.model.CommentModel
-import com.hari.hackies.model.ReplyModel
 import com.hari.hackies.model.StoryModel
 
 @Database(entities = [StoryModel::class, CommentModel::class], version = 1)

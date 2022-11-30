@@ -6,25 +6,22 @@
     tools:context=".ui.Splash"
     android:background="@color/appBgClr">
 
-    <TextView
-        android:id="@+id/hackies_txt_splash"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/hackies"
-        android:textColor="@color/white"
-        android:textSize="@dimen/thirtySizeSP"
-        android:layout_centerInParent="true"
-        android:fontFamily="@font/heebo_bold"
-        android:background="@drawable/splash_app_name_bg"/>
+    <ImageView
+        android:id="@+id/app_icon_splash"
+        android:layout_width="@dimen/hundredSize"
+        android:layout_height="@dimen/hundredSize"
+        android:src="@drawable/app_icon"
+        android:layout_centerInParent="true"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading stories..."
+        android:text="@string/loading_stories"
         android:textSize="@dimen/sixteenSizeSP"
         android:textColor="@color/black"
         android:layout_above="@+id/progress_splash"
         android:paddingStart="@dimen/twentySize"
+        android:paddingEnd="@dimen/zeroSize"
         android:layout_marginBottom="@dimen/fiveSize"/>
 
     <ProgressBar

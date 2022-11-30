@@ -19,28 +19,20 @@ import java.util.*
 class CommentRepo(private val disposable: CompositeDisposable, private val viewModel: CommentViewModel?= null,
                   private val commentList: MutableLiveData<List<CommentModel>>, private val isLoading: MutableLiveData<Boolean>) {
 
-    /*companion object{
-
-        private var commentRepo: CommentRepo?= null
-        fun getInstance(disposable: CompositeDisposable, viewModel: CommentViewModel?= null,
-                        commentList: MutableLiveData<List<CommentModel>>, isLoading: MutableLiveData<Boolean>): CommentRepo{
-            if(commentRepo == null){
-                commentRepo = CommentRepo(disposable, viewModel, commentList, isLoading)
-            }
-            return commentRepo!!
-        }
-    }*/
-
     fun checkAndDownloadComments(commentIDs: ArrayList<Int>, parentId: Int, context: Context){
 
+        isLoading.value = true
         if (!CheckInternet.isInternetAvailable(context)){
             doResultAction(parentId)
         }else {
             runBlocking {
 
                 val localComments = getCommentsByParentID(parentId)
-                if (localComments.size == commentIDs.size)
+                if (localComments.size == commentIDs.size){
+
                     commentList.value = localComments
+                    isLoading.value = false
+                }
                 else{
 
                     val localCommentIDs = ArrayList<Int>()

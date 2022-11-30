@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
@@ -34,7 +32,6 @@ open class StoriesAdapter(private val storiesInterface: StoriesInterface):
     }
 
     class MainViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val rootLinear = itemView.findViewById<LinearLayout>(R.id.root_linear_list_stories)!!
         val storyTitleHeaderTV = itemView.findViewById<TextView>(R.id.story_title_header_list_stories)!!
         val storyTitleTV = itemView.findViewById<TextView>(R.id.story_title_list_stories)!!
         val authorNameTV = itemView.findViewById<TextView>(R.id.author_list_stories)!!
@@ -77,14 +74,6 @@ open class StoriesAdapter(private val storiesInterface: StoriesInterface):
             holder.scoreTV.text = if(filteredData!![position].score != null) filteredData!![position].score.toString() else "0"
             holder.commentsCountTV.text = String.format("%s%s", "Comments  ", filteredData!![position].kids.size)
 
-            if (filteredData!![position].isSelected!!){
-                holder.rootLinear.setBackgroundColor(ResourcesCompat.getColor(holder.itemView.context.resources, R.color.bottomSheetHandleClr,
-                    holder.itemView.context.theme))
-            }else{
-                holder.rootLinear.setBackgroundColor(ResourcesCompat.getColor(holder.itemView.context.resources, R.color.appBgClr,
-                    holder.itemView.context.theme))
-            }
-
             holder.storyTitleTV.setOnClickListener {
                 if (filteredData!![position].url != null && filteredData!![position].url!!.isNotEmpty()){
 
@@ -96,19 +85,18 @@ open class StoriesAdapter(private val storiesInterface: StoriesInterface):
                     bundle.putString("StoryURL", filteredData!![position].url)
                     fragment.arguments = bundle
                     fragment.show(fragmentTransaction, "StoryFrag")
-                }else Snackbar.make(holder.itemView, "This story has no web links", Snackbar.LENGTH_SHORT).show()
+                }else Snackbar.make(holder.itemView, holder.itemView.context.resources.getString(R.string.no_web_link_found), Snackbar.LENGTH_SHORT).show()
             }
 
             holder.commentsCountTV.setOnClickListener {
 
                 if (filteredData!![position].kids.size > 0){
 
-                    filteredData!![position].isSelected = true
                     notifyItemChanged(position)
                     storiesInterface.showCommentsBottomSheetDialog(filteredData!![position], position)
                 }
 
-                else Snackbar.make(holder.itemView, "This story has no comments", Snackbar.LENGTH_SHORT).show()
+                else Snackbar.make(holder.itemView, holder.itemView.context.resources.getString(R.string.no_comments_found), Snackbar.LENGTH_SHORT).show()
             }
         }
     }

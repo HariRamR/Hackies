@@ -1,5 +1,7 @@
 package com.hari.hackies.adapter
 
+import android.os.Bundle
+import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +12,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.hari.hackies.R
 import com.hari.hackies.interfaces.StoriesInterface
 import com.hari.hackies.model.CommentModel
+import com.hari.hackies.ui.Dashboard
+import com.hari.hackies.ui.fragment.StoryFrag
 import com.hari.hackies.ui.utils.StringExtensions.capitalizeFirstLetter
 
-class CommentsAdapter(private val storiesInterface: StoriesInterface):
+class CommentsAdapter(private val storiesInterface: StoriesInterface, private val dashboard: Dashboard):
     RecyclerView.Adapter<CommentsAdapter.MainViewHolder>() {
 
     private var commentsList:List<CommentModel> = listOf()
@@ -63,6 +67,21 @@ class CommentsAdapter(private val storiesInterface: StoriesInterface):
                 if (commentsList[position].kids.size > 0)
                     storiesInterface.showReplyBottomSheetDialog(commentsList[position], position)
                 else Snackbar.make(holder.itemView, "This comment has no reply", Snackbar.LENGTH_SHORT).show()
+            }
+
+            holder.commentTV.setOnClickListener {
+                val spans: Array<URLSpan> = holder.commentTV.urls
+                if (spans.isNotEmpty()){
+
+                    val fragment = StoryFrag()
+                    val fragmentTransaction =
+                        dashboard.supportFragmentManager.beginTransaction()
+
+                    val bundle = Bundle()
+                    bundle.putString("StoryURL", spans[0].url)
+                    fragment.arguments = bundle
+                    fragment.show(fragmentTransaction, "StoryFrag")
+                }
             }
         }
     }

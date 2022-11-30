@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import java.net.InetAddress
 
 object CheckInternet {
 
@@ -28,15 +27,6 @@ object CheckInternet {
                 connectivityManager.activeNetworkInfo ?: return false
             @Suppress("DEPRECATION")
             return networkInfo.isConnected
-        }
-    }
-
-    fun isNetAvailable(): Boolean{
-        return try {
-            val url: InetAddress = InetAddress.getByName("google.com")
-            !url.equals("")
-        } catch (e: Exception) {
-            false
         }
     }
 }

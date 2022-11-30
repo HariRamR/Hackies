@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/root_linear_list_stories"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -13,7 +12,6 @@
         android:id="@+id/story_title_header_list_stories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="S"
         android:textColor="@color/white"
         android:textSize="@dimen/twentyOneSizeSP"
         android:fontFamily="@font/heebo_bold"
@@ -34,7 +32,6 @@
             android:id="@+id/story_title_list_stories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="The Insane Scale of Europe’s New Mega-Tunnel"
             android:textColor="@color/black"
             android:textSize="@dimen/eighteenSizeSP"
             android:fontFamily="@font/noto_sans_medium"
@@ -56,7 +53,6 @@
                 android:id="@+id/author_list_stories"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Simonebrunozzi"
                 android:textColor="@color/primaryTxtClr"
                 android:textSize="@dimen/sixteenSizeSP"
                 android:layout_weight="1"/>
@@ -65,7 +61,6 @@
                 android:id="@+id/date_list_stories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 Week ago"
                 android:textColor="@color/secondaryTxtClr"
                 android:textSize="@dimen/fourteenSizeSP" />
 
@@ -84,7 +79,6 @@
                 android:id="@+id/comments_list_stories"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Comments  5"
                 android:textColor="@color/primaryTxtClr"
                 android:textSize="@dimen/fourteenSizeSP"
                 android:includeFontPadding="false"
@@ -96,7 +90,6 @@
                 android:id="@+id/score_list_stories"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="143"
                 android:textColor="@color/primaryTxtClr"
                 android:textSize="@dimen/fourteenSizeSP"
                 android:includeFontPadding="false"

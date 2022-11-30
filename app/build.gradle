@@ -26,7 +26,9 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -65,7 +67,6 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
 
     // LiveData
-//    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.5.1"
     def live_data_version = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-common:$live_data_version"
     implementation "androidx.lifecycle:lifecycle-runtime:$live_data_version"

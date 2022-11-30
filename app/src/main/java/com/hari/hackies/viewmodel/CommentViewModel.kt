@@ -13,11 +13,9 @@ import io.reactivex.disposables.CompositeDisposable
 
 class CommentViewModel: ViewModel() {
 
-    var commentList: MutableLiveData<List<CommentModel>> = MutableLiveData<List<CommentModel>>()
-    var replyListList: MutableLiveData<List<CommentModel>> = MutableLiveData<List<CommentModel>>()
+    private var commentList: MutableLiveData<List<CommentModel>> = MutableLiveData<List<CommentModel>>()
     private var commentRepo: CommentRepo?= null
-    var isCommentLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
-    var isReplyLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
+    private var isCommentLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
     var isNetAvailable: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
 
     companion object{
@@ -49,10 +47,6 @@ class CommentViewModel: ViewModel() {
         return isCommentLoading
     }
 
-    /*fun isReplyLoading(): LiveData<Boolean> {
-        return isReplyLoading
-    }*/
-
     fun isNetAvailable(): LiveData<Boolean> {
         return isNetAvailable
     }
@@ -60,8 +54,4 @@ class CommentViewModel: ViewModel() {
     fun getCommentData(): LiveData<List<CommentModel>> {
         return commentList
     }
-
-    /*fun getReplyData(): LiveData<List<CommentModel>> {
-        return replyListList
-    }*/
 }

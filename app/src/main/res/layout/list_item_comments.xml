@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/twentySize">
+    android:paddingTop="@dimen/twentySize"
+    android:paddingBottom="@dimen/twentySize">
 
     <TextView
         android:id="@+id/author_name_header_list_comments"
@@ -15,7 +16,6 @@
         android:gravity="center"
         android:includeFontPadding="false"
         android:maxLength="1"
-        android:text="R"
         android:textColor="@color/white"
         android:textSize="@dimen/eighteenSizeSP"
         android:textStyle="bold" />
@@ -40,7 +40,6 @@
                 android:fontFamily="@font/noto_sans_medium"
                 android:gravity="top"
                 android:includeFontPadding="false"
-                android:text="Rcarr"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sixteenSizeSP"
                 android:textStyle="bold"
@@ -50,7 +49,6 @@
                 android:id="@+id/date_list_comments"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 Week ago"
                 android:textColor="@color/secondaryTxtClr"
                 android:textSize="@dimen/fourteenSizeSP"
                 android:includeFontPadding="false"/>
@@ -61,7 +59,6 @@
             android:id="@+id/comment_list_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="It has been around 17 years now. It still amazes me that so much high quality and informative content like this is made on a near daily basis."
             android:textColor="@color/primaryTxtClr"
             android:textSize="@dimen/sixteenSizeSP"
             android:textStyle="bold"
@@ -71,12 +68,11 @@
             android:id="@+id/reply_count_list_comments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="5"
             android:textSize="@dimen/sixteenSizeSP"
             android:textColor="@color/secondaryTxtClr"
             android:includeFontPadding="false"
             app:drawableStartCompat="@drawable/reply_icon"
-            android:drawablePadding="@dimen/tenSize"
+            android:drawablePadding="@dimen/fiveSize"
             android:gravity="center"
             android:clickable="true"
             android:focusable="true"

@@ -1,10 +1,8 @@
 package com.hari.hackies.api
 
 import com.hari.hackies.model.CommentModel
-import com.hari.hackies.model.ReplyModel
 import com.hari.hackies.model.StoryModel
 import io.reactivex.Observable
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

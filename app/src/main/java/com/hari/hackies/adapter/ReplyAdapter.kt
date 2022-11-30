@@ -1,5 +1,7 @@
 package com.hari.hackies.adapter
 
+import android.os.Bundle
+import android.text.style.URLSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,12 +9,12 @@ import android.widget.TextView
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hari.hackies.R
-import com.hari.hackies.interfaces.StoriesInterface
 import com.hari.hackies.model.CommentModel
-import com.hari.hackies.model.ReplyModel
+import com.hari.hackies.ui.Dashboard
+import com.hari.hackies.ui.fragment.StoryFrag
 import com.hari.hackies.ui.utils.StringExtensions.capitalizeFirstLetter
 
-class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.MainViewHolder>() {
+class ReplyAdapter(private val dashboard: Dashboard): RecyclerView.Adapter<ReplyAdapter.MainViewHolder>() {
 
     private val regex = Regex("[^A-Za-z0-9 ]")
     private var replyList:List<CommentModel> = listOf()
@@ -54,6 +56,21 @@ class ReplyAdapter: RecyclerView.Adapter<ReplyAdapter.MainViewHolder>() {
             holder.authorNameTV.text = replyList[position].by
             holder.dateTV.text = replyList[position].date
             holder.commentTV.text = HtmlCompat.fromHtml(replyList[position].text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
+            holder.commentTV.setOnClickListener {
+                val spans: Array<URLSpan> = holder.commentTV.urls
+                if (spans.isNotEmpty()){
+
+                    val fragment = StoryFrag()
+                    val fragmentTransaction =
+                        dashboard.supportFragmentManager.beginTransaction()
+
+                    val bundle = Bundle()
+                    bundle.putString("StoryURL", spans[0].url)
+                    fragment.arguments = bundle
+                    fragment.show(fragmentTransaction, "StoryFrag")
+                }
+            }
         }
     }
 

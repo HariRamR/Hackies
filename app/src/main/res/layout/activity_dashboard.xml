@@ -2,7 +2,7 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipe_layput_dashboard"
+    android:id="@+id/swipe_layout_dashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -33,6 +33,7 @@
             android:layout_marginTop="@dimen/tenSize"
             app:cardCornerRadius="@dimen/thirtySize"
             app:cardElevation="@dimen/zeroSize"
+            app:cardBackgroundColor="@color/searchBGClr"
             android:layout_below="@+id/stories_txt_dashboard">
 
             <EditText
@@ -41,7 +42,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/tenSize"
                 android:layout_marginEnd="@dimen/tenSize"
-                android:background="@color/transparent"
+                android:background="@color/searchBGClr"
                 android:drawableStart="@drawable/search_icon"
                 android:drawablePadding="@dimen/tenSize"
                 android:hint="@string/search_stories"

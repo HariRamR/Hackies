@@ -1,5 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<WebView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/web_view_frag_story"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent">
+
+    <WebView
+        android:id="@+id/web_view_frag_story"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <TextView
+        android:id="@+id/loading_txt_frag_story"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/loading"
+        android:textSize="@dimen/sixteenSizeSP"
+        android:textColor="@color/black"
+        android:layout_above="@+id/progress_frag_story"
+        android:paddingStart="@dimen/twentySize"
+        android:paddingEnd="@dimen/zeroSize"
+        android:layout_marginBottom="@dimen/fiveSize"/>
+
+    <ProgressBar
+        android:id="@+id/progress_frag_story"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:indeterminate="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/tenSize"/>
+
+</RelativeLayout>

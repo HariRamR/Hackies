@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.util.Log
-import androidx.sqlite.db.SimpleSQLiteQuery
 import com.hari.hackies.api.ApiClient
 import com.hari.hackies.model.StoryModel
 import com.hari.hackies.ui.Dashboard
@@ -56,7 +55,6 @@ class StoryRepo(
                         },
                         { throwable ->
                             Log.e("getSourceFromAPI ", throwable.message ?: "onError")
-//                            viewModel.isError.value = false
                             viewModel.isLoading.value = false
                         }
                     )

@@ -7,10 +7,8 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SnapHelper
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -50,13 +48,11 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
     private lateinit var viewModel: StoryViewModel
     private lateinit var commentViewModel: CommentViewModel
     private lateinit var replyViewModel: ReplyViewModel
-    lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private val disposable = CompositeDisposable()
     private var selectedStoryPos: Int?= 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-//        hideStatusBar(this)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
@@ -68,7 +64,7 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
 
     private fun initViews(){
 
-        swipeRefreshLayout = findViewById(R.id.swipe_layput_dashboard)
+        swipeRefreshLayout = findViewById(R.id.swipe_layout_dashboard)
         swipeRefreshLayout.setOnRefreshListener(this)
         commentBottomSheetDialog = BottomSheetDialog(this)
         replyBottomSheetDialog = BottomSheetDialog(this)
@@ -93,12 +89,12 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
         storiesRecycler.adapter = storiesAdapter
 
         val commentsRecycler = commentBottomSheetDialog.findViewById<RecyclerView>(R.id.recycler_bottom_sheet_comments)
-        commentsAdapter = CommentsAdapter(this)
+        commentsAdapter = CommentsAdapter(this, this)
         commentsRecycler!!.layoutManager = LinearLayoutManager(this)
         commentsRecycler.adapter = commentsAdapter
 
         val replyRecycler = replyBottomSheetDialog.findViewById<RecyclerView>(R.id.comments_recycler_bottom_sheet_reply)
-        replyAdapter = ReplyAdapter()
+        replyAdapter = ReplyAdapter(this)
         replyRecycler!!.layoutManager = LinearLayoutManager(this)
         replyRecycler.adapter = replyAdapter
         replyRecycler.isNestedScrollingEnabled = false
@@ -129,16 +125,16 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
         viewModel = StoryViewModel.getInstance(application)
         commentViewModel = CommentViewModel.getInstance(application)
         replyViewModel = ReplyViewModel.getInstance(application)
-        viewModel.getStoriesData().observe(this, Observer {
+        viewModel.getStoriesData().observe(this) {
 
-                for(story in it){
-                    val date = ConvertTime.format(story.time!!)
-                    story.date = date
-                }
-                storiesAdapter.setStoryData(it)
-        })
+            for (story in it) {
+                val date = ConvertTime.format(story.time!!)
+                story.date = date
+            }
+            storiesAdapter.setStoryData(it)
+        }
 
-        viewModel.isNoData().observe(this, Observer {
+        viewModel.isNoData().observe(this) {
             if (it){
                 if (CheckInternet.isInternetAvailable(this)){
                     storiesRecycler.visibility = View.GONE
@@ -154,56 +150,59 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
                 errorTV.visibility = View.GONE
                 storiesRecycler.visibility = View.VISIBLE
             }
-        })
+        }
 
         commentBottomSheetDialog.setOnDismissListener {
             storiesAdapter.notifyItemChanged(selectedStoryPos!!)
+            commentsAdapter.setCommentData(listOf())
         }
 
-        commentViewModel.isNetAvailable().observe(this, Observer {
+        replyBottomSheetDialog.setOnDismissListener {
+            replyAdapter.setReplyData(listOf())
+        }
+
+        commentViewModel.isNetAvailable().observe(this) {
             if(!it){
 
-                Snackbar.make(rootRelative, "Check your internet connection and try again", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(rootRelative, resources.getString(R.string.internet_not_available_msg), Snackbar.LENGTH_SHORT).show()
                 commentViewModel.isNetAvailable.value = true
             }
-        })
+        }
 
         //comment observer
-        commentViewModel.getCommentData().observe(this, Observer {
+        commentViewModel.getCommentData().observe(this) {
 
             for(comment in it){
                 val date = ConvertTime.format(comment.time!!)
                 comment.date = date
             }
             commentsAdapter.setCommentData(it)
-            commentBottomSheetDialog.show()
-        })
+        }
 
-        commentViewModel.isCommentLoading().observe(this, Observer {
+        commentViewModel.isCommentLoading().observe(this) {
             if(it)
                 commentProgressBar.visibility = View.VISIBLE
             else
                 commentProgressBar.visibility = View.GONE
-        })
+        }
 
         //Reply observer
-        replyViewModel.getReplyData().observe(this, Observer {
+        replyViewModel.getReplyData().observe(this) {
 
             for(reply in it){
                 val date = ConvertTime.format(reply.time!!)
                 reply.date = date
             }
             replyAdapter.setReplyData(it)
-            replyBottomSheetDialog.show()
-        })
+        }
 
-        replyViewModel.isReplyLoading().observe(this, Observer {
+        replyViewModel.isReplyLoading().observe(this) {
 
             if(it)
                 replyProgressBar.visibility = View.VISIBLE
             else
                 replyProgressBar.visibility = View.GONE
-        })
+        }
     }
 
     override fun showCommentsBottomSheetDialog(storyModel: StoryModel, pos: Int) {
@@ -211,8 +210,9 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
         if(!commentBottomSheetDialog.isShowing){
 
             selectedStoryPos = pos
-            storyModel.isSelected = false
+            commentsAdapter.setCommentData(listOf())
             commentViewModel.initCommentRepo(disposable, storyModel.kids, storyModel.id!!, context = this)
+            commentBottomSheetDialog.show()
         }
     }
 
@@ -226,14 +226,15 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
             commentTVReply.text = HtmlCompat.fromHtml(commentModel.text!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
 
             replyViewModel.initCommentRepo(disposable, commentModel.kids, commentModel.id!!, this)
+            replyBottomSheetDialog.show()
         }
     }
 
     override fun onRefresh() {
 
-        viewModel.isLoading().observe(this, Observer {
+        viewModel.isLoading().observe(this) {
             swipeRefreshLayout.isRefreshing = it
-        })
+        }
         viewModel.isLoading.value = true
         viewModel.initStoryRepo(this, disposable, false, this)
     }

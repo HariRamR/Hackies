@@ -1,9 +1,11 @@
 package com.hari.hackies.model
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Keep
 @Entity(tableName = "commentMaster")
 data class CommentModel (
 
