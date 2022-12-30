@@ -7,31 +7,24 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ApiClient {
+object ApiClient {
 
-    companion object {
+    fun getClient(): ApiInterface? {
 
-        private var retrofit: Retrofit? = null
+        val log = HttpLoggingInterceptor()
+        log.level = HttpLoggingInterceptor.Level.BODY
 
-        fun getClient(): ApiInterface? {
-            if (retrofit == null) {
-
-                val log = HttpLoggingInterceptor()
-                log.level = HttpLoggingInterceptor.Level.BODY
-
-                val okHttpClient: OkHttpClient = OkHttpClient().newBuilder()
-                    .addInterceptor(log)
-                    .connectTimeout(30, TimeUnit.SECONDS)
-                    .writeTimeout(30, TimeUnit.SECONDS)
-                    .readTimeout(30, TimeUnit.SECONDS)
-                    .build()
-                retrofit = Retrofit.Builder().client(okHttpClient)
-                    .baseUrl("https://hacker-news.firebaseio.com/v0/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .build()
-            }
-            return retrofit!!.create(ApiInterface::class.java)
-        }
+        val okHttpClient: OkHttpClient = OkHttpClient().newBuilder()
+            .addInterceptor(log)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+       val retrofit = Retrofit.Builder().client(okHttpClient)
+            .baseUrl("https://hacker-news.firebaseio.com/v0/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+        return retrofit.create(ApiInterface::class.java)
     }
 }

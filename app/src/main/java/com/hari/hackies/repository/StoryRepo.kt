@@ -9,6 +9,7 @@ import com.hari.hackies.api.ApiClient
 import com.hari.hackies.model.StoryModel
 import com.hari.hackies.ui.Dashboard
 import com.hari.hackies.ui.utils.CheckInternet
+import com.hari.hackies.viewmodel.CommentViewModel.Companion.dao
 import com.hari.hackies.viewmodel.StoryViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -124,7 +125,7 @@ class StoryRepo(
     private fun insertStories(stories: ArrayList<StoryModel>) {
 
         GlobalScope.async {
-            StoryViewModel.dao!!.insertStories(stories)
+            viewModel.dao!!.insertStories(stories)
         }
     }
 
@@ -132,16 +133,16 @@ class StoryRepo(
 
         val differDelete = ArrayList<Deferred<Int>>()
         differDelete.add(GlobalScope.async {
-            StoryViewModel.dao!!.deleteOldStories()
-            StoryViewModel.dao!!.deleteOldComments() // will clear old comments
-            StoryViewModel.dao!!.deleteOldComments() // calling twice to delete old replies
+            viewModel.dao!!.deleteOldStories()
+            viewModel.dao!!.deleteOldComments() // will clear old comments
+            viewModel.dao!!.deleteOldComments() // calling twice to delete old replies
         })
         differDelete.awaitAll()
 
         val differ = ArrayList<Deferred<List<StoryModel>>>()
         differ.add(
             GlobalScope.async {
-                StoryViewModel.dao!!.getAllStories()
+                viewModel.dao!!.getAllStories()
             }
         )
         return differ.awaitAll()[0]
@@ -152,7 +153,7 @@ class StoryRepo(
         val differ = ArrayList<Deferred<List<Int>>>()
         differ.add(
             GlobalScope.async {
-                StoryViewModel.dao!!.getStoryIDs()
+                viewModel.dao!!.getStoryIDs()
             }
         )
         return differ.awaitAll()[0]

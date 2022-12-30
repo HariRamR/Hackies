@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.hari.hackies.R
 import com.hari.hackies.viewmodel.StoryViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -22,7 +23,7 @@ class Splash : AppCompatActivity() {
         val bounceAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_anim)
         splashIcon.startAnimation(bounceAnimation)
 
-        val viewModel = StoryViewModel.getInstance(application)
+        val viewModel = ViewModelProvider(this)[StoryViewModel::class.java]
         viewModel.initStoryRepo(this, disposable, true, this)
     }
 

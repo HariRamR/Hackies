@@ -64,7 +64,7 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
     //Kotlin Coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4"
 
     // LiveData
     def live_data_version = "2.5.1"

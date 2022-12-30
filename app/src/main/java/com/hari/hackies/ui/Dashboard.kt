@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.HtmlCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -122,7 +123,7 @@ class Dashboard: AppCompatActivity(), StoriesInterface, SwipeRefreshLayout.OnRef
             replyBottomSheetDialog.dismiss()
         }
 
-        viewModel = StoryViewModel.getInstance(application)
+        viewModel = ViewModelProvider(this)[StoryViewModel::class.java]
         commentViewModel = CommentViewModel.getInstance(application)
         replyViewModel = ReplyViewModel.getInstance(application)
         viewModel.getStoriesData().observe(this) {
