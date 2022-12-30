@@ -12,7 +12,7 @@ import com.hari.hackies.model.StoryModel
 import com.hari.hackies.repository.StoryRepo
 import io.reactivex.disposables.CompositeDisposable
 
-class StoryViewModel(private val application: Application): ViewModel() {
+class StoryViewModel(application: Application): ViewModel() {
 
     var storyList: MutableLiveData<List<StoryModel>> = MutableLiveData<List<StoryModel>>()
     private var storyRepo: StoryRepo?= null
