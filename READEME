@@ -1,0 +1,40 @@
+Libraries Used:
+
+1. Retrofit - For making API request
+2. Okhttp   - For setting connection timeout to API request
+3. Okhttp logging - For logging API request
+4. Rxjava   - For managing asynchronous task
+5. ROOM     - For storing data locally
+
+
+Decisions Made:
+
+1. Used Splash screen to show progress till stories data from server
+
+2. Implemented Search filer
+
+3. Showing Loading, No Data and Error states in app
+
+4. Created Light and Dark Theme
+
+5. Fetching comments and replies for stories when user clicks on respective stories, there by
+   reduced loading time of the app
+   
+6. Using ROOM to store all the data fetched from API, hence app can work without internet
+
+7. Designed a floating action button to goto the current latest story for Easy Navigation
+
+8. Users of the app can read the story by clicking respective story. Using Webview to view story 
+   within application itself
+   
+9. Users can view web links from Comments and Replies of stories
+
+10. Doing all the database and api related operations in new Thread by using RXJava
+
+11. Used MVVM architecture for State Management 
+
+12. Used Colors and Font sizes accordingly to give more visibility to important content
+
+13. Used Bottomsheet to show comments and replies, hence maintained navigation simple
+
+14. Showing published Time of stories, comments and replies in user friendly way
